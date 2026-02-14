@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.database import get_db
 from src.schemas import WalletCreate, WalletExport, WalletResponse
 from src.services.wallet import WalletService, is_valid_address
-from src.auth import verify_admin_key
+from src.auth import verify_admin_key, verify_agent_key
 
 router = APIRouter(prefix="/wallets", tags=["wallets"])
 

@@ -1,11 +1,12 @@
 from datetime import datetime
-from enum import Enum
+from enum import Enum as PythonEnum
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
     JSON,
     Boolean,
     DateTime,
+    Enum as SqlAlchemyEnum,
     Float,
     ForeignKey,
     Index,
@@ -24,14 +25,14 @@ class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 
-class UserType(str, Enum):
+class UserType(str, PythonEnum):
     """User type enumeration."""
 
     AGENT = "agent"
     HUMAN = "human"
 
 
-class ReputationAction(str, Enum):
+class ReputationAction(str, PythonEnum):
     """Reputation action types."""
 
     FUNDS_RAISED = "funds_raised"
@@ -279,7 +280,7 @@ class Wallet(Base, TimestampMixin):
         String(255), nullable=True, index=True
     )  # Agent ID or User ID
     user_type: Mapped[UserType] = mapped_column(
-        Enum(UserType), nullable=True, index=True
+        SqlAlchemyEnum(UserType), nullable=True, index=True
     )  # AGENT or HUMAN
     twitter_handle: Mapped[str | None] = mapped_column(String(100), nullable=True, index=True)
     address: Mapped[str] = mapped_column(String(42), unique=True, nullable=False, index=True)
