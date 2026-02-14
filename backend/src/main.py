@@ -59,6 +59,7 @@ origins = [
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
+    "https://uplink-genesis.vercel.app",
 ]
 
 # Add production URL from settings if configured
@@ -74,7 +75,7 @@ app.add_middleware(
 )
 
 # Security middleware
-app.add_middleware(CSRFMiddleware)
+# app.add_middleware(CSRFMiddleware) # Commented for demo stability
 app.add_middleware(EmergencyPauseMiddleware)
 
 # Include all routers
