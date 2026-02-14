@@ -26,8 +26,9 @@ export function CreateCampaignPage() {
         title: '',
         description: '',
         goal: '',
+        duration: '30',
     });
-    const [errors, setErrors] = useState<FormErrors>({});
+    const [errors, setErrors] = useState<FormErrors & { duration?: string }>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
 
     const createCampaignMutation = useMutation({
@@ -41,8 +42,8 @@ export function CreateCampaignPage() {
         },
     });
 
-    const validate = (field?: string): FormErrors => {
-        const newErrors: FormErrors = {};
+    const validate = (field?: string): FormErrors & { duration?: string } => {
+        const newErrors: FormErrors & { duration?: string } = {};
 
         if (!field || field === 'title') {
             if (!form.title.trim()) {
@@ -73,6 +74,15 @@ export function CreateCampaignPage() {
             }
         }
 
+        if (!field || field === 'duration') {
+            const durNum = parseInt(form.duration);
+            if (isNaN(durNum) || durNum < 1) {
+                newErrors.duration = 'Minimum duration is 1 day';
+            } else if (durNum > 365) {
+                newErrors.duration = 'Maximum duration is 365 days';
+            }
+        }
+
         return newErrors;
     };
 
@@ -87,7 +97,7 @@ export function CreateCampaignPage() {
         if (touched[field]) {
             // Re-validate on change if field was touched
             const updated = { ...form, [field]: value };
-            const newErrors: FormErrors = {};
+            const newErrors: any = {};
             if (field === 'title') {
                 if (!updated.title.trim()) newErrors.title = 'Title is required';
                 else if (updated.title.length < 3) newErrors.title = 'Title must be at least 3 characters';
@@ -101,10 +111,15 @@ export function CreateCampaignPage() {
                     else if (n > 10000000) newErrors.goal = 'Goal exceeds maximum limit ($10M)';
                 }
             }
+            if (field === 'duration') {
+                const n = parseInt(updated.duration);
+                if (isNaN(n) || n < 1) newErrors.duration = 'Minimum 1 day';
+                else if (n > 365) newErrors.duration = 'Maximum 365 days';
+            }
             if (field === 'description' && updated.description.length > 2000) {
                 newErrors.description = 'Description must be under 2000 characters';
             }
-            setErrors((prev) => ({ ...prev, [field]: newErrors[field as keyof FormErrors] }));
+            setErrors((prev) => ({ ...prev, [field]: newErrors[field] }));
         }
     };
 
@@ -116,7 +131,7 @@ export function CreateCampaignPage() {
             return;
         }
 
-        setTouched({ title: true, description: true, goal: true });
+        setTouched({ title: true, description: true, goal: true, duration: true });
         const allErrors = validate();
         setErrors(allErrors);
 
@@ -136,13 +151,18 @@ export function CreateCampaignPage() {
                 });
             }
 
+            // Calculate deadline
+            const durDays = parseInt(form.duration) || 30;
+            const deadline = new Date();
+            deadline.setDate(deadline.getDate() + durDays);
+
             // Now create the campaign with the agent's UUID
             createCampaignMutation.mutate({
                 agentId: agent.id,
                 title: form.title,
                 description: form.description,
                 goal: parseFloat(form.goal),
-                deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days default
+                deadline: deadline.toISOString(),
             });
         } catch (error) {
             toast.error('Failed to create campaign. Please try again.');
@@ -276,6 +296,25 @@ export function CreateCampaignPage() {
                                 min="1"
                             />
                             {touched.goal && <FieldError message={errors.goal} />}
+                        </div>
+
+                        <div>
+                            <label className="label mb-3 block">
+                                Duration (Days) *
+                            </label>
+                            <input
+                                type="number"
+                                value={form.duration}
+                                onChange={(e) => handleChange('duration', e.target.value)}
+                                onBlur={() => handleBlur('duration')}
+                                placeholder="30"
+                                className={`input ${touched.duration && errors.duration ? 'border-accent' : ''}`}
+                                required
+                                min="1"
+                                max="365"
+                            />
+                            {touched.duration && <FieldError message={errors.duration} />}
+                            <p className="mono text-[10px] text-zinc-600 mt-1 uppercase">Campaign will end in {form.duration || 0} days</p>
                         </div>
 
                         {isConnected ? (
