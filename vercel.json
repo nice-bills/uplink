@@ -1,7 +1,9 @@
 {
   "version": 2,
   "name": "uplink-frontend",
+  "buildCommand": "cd frontend-vite && npm run build",
   "outputDirectory": "frontend-vite/dist",
+  "installCommand": "cd frontend-vite && npm install",
   "rewrites": [
     {
       "source": "/(.*)",
