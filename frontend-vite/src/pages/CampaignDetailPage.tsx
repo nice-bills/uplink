@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Loader2, AlertCircle, Copy, Wallet } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/Button';
@@ -14,7 +14,7 @@ import { SourceCard } from '../components/SourceCard';
 import { ShareButtons } from '../components/ShareButtons';
 import { useDonate } from '../hooks/useDonate';
 import type { Campaign } from '../types';
-import { getCampaign, formatAmount, calculateProgress } from '../lib/api';
+import { getCampaign, formatAmount, calculateProgress, formatAddress } from '../lib/api';
 
 export function CampaignDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -159,6 +159,32 @@ export function CampaignDetailPage() {
                                         {progress.toFixed(0)}% funded
                                     </div>
                                 </div>
+
+                                {/* Treasury Address */}
+                                {campaign.treasury_address && (
+                                    <div className="mb-6 p-4 bg-zinc-800/50 border border-zinc-700 rounded-lg">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Wallet className="w-4 h-4 text-accent" />
+                                            <span className="label text-xs">RECEIVING ADDRESS</span>
+                                        </div>
+                                        <p className="text-zinc-400 text-xs mb-2">Send MON directly to:</p>
+                                        <div className="flex items-center gap-2">
+                                            <code className="flex-1 bg-zinc-900 px-3 py-2 rounded text-xs text-zinc-300 break-all font-mono">
+                                                {campaign.treasury_address}
+                                            </code>
+                                            <button
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(campaign.treasury_address!);
+                                                    toast.success('Address copied!');
+                                                }}
+                                                className="p-2 hover:bg-zinc-700 rounded transition-colors"
+                                                title="Copy address"
+                                            >
+                                                <Copy className="w-4 h-4 text-zinc-400" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Donation Form */}
                                 {campaign.status === 'active' && (

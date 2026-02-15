@@ -72,6 +72,8 @@ export interface Campaign {
     source_timestamp?: string;
     is_verified?: boolean;
     verification_status?: string;
+    // Treasury address for receiving donations
+    treasury_address?: string;
 }
 
 export interface CampaignCreate {

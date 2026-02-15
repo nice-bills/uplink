@@ -68,6 +68,7 @@ class CampaignResponse(CampaignBase):
     source_timestamp: datetime | None = None
     is_verified: bool = False
     verification_status: str = "unverified"
+    treasury_address: str | None = None
 
     model_config = {"from_attributes": True}
 
