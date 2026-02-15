@@ -1,13 +1,19 @@
 {
   "version": 2,
   "name": "uplink-frontend",
-  "buildCommand": "cd frontend-vite && npm run build",
-  "outputDirectory": "frontend-vite/dist",
-  "installCommand": "cd frontend-vite && npm install",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "frontend-vite/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
