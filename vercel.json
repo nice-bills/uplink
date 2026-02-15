@@ -1,15 +1,7 @@
 {
   "version": 2,
   "name": "uplink-frontend",
-  "builds": [
-    {
-      "src": "frontend-vite/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "frontend-vite/dist"
-      }
-    }
-  ],
+  "outputDirectory": "frontend-vite/dist",
   "rewrites": [
     {
       "source": "/(.*)",
