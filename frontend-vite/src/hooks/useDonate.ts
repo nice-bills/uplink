@@ -1,13 +1,25 @@
 /**
  * useDonate Hook
  * Handles on-chain donation transactions via wagmi
+ * Calls contract functions directly to ensure proper tracking
  */
 
 import { useState, useCallback } from 'react';
-import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther } from 'viem';
 import { createDonation } from '../lib/api';
 import type { TokenType } from '../types';
+
+// CampaignFactory ABI - only the contribute function we need
+const CAMPAIGN_FACTORY_ABI = [
+  {
+    inputs: [{ name: '_campaignId', type: 'uint256' }],
+    name: 'contribute',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+] as const;
 
 interface UseDonateOptions {
     campaignId: string;
@@ -29,7 +41,7 @@ export function useDonate({ campaignId, onSuccess, onError }: UseDonateOptions):
     const [error, setError] = useState<Error | null>(null);
     const [txHash, setTxHash] = useState<string | null>(null);
 
-    const { sendTransactionAsync, isPending } = useSendTransaction();
+    const { writeContractAsync, isPending } = useWriteContract();
 
     const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
         hash: txHash as `0x${string}` | undefined,
@@ -53,13 +65,18 @@ export function useDonate({ campaignId, onSuccess, onError }: UseDonateOptions):
         try {
             setError(null);
 
-            // Get treasury address from campaign (TODO: fetch from API)
-            // For now, we'll use the campaign ID to look up the treasury
-            const treasuryAddress = await getTreasuryAddress(campaignId);
+            const factoryAddress = import.meta.env.VITE_CAMPAIGN_FACTORY;
+            if (!factoryAddress) {
+                throw new Error('Campaign factory address not configured');
+            }
 
-            // Send transaction
-            const hash = await sendTransactionAsync({
-                to: treasuryAddress as `0x${string}`,
+            // Call contribute function on CampaignFactory
+            // This properly tracks which campaign the donation belongs to
+            const hash = await writeContractAsync({
+                address: factoryAddress as `0x${string}`,
+                abi: CAMPAIGN_FACTORY_ABI,
+                functionName: 'contribute',
+                args: [BigInt(campaignId)],
                 value: parseEther(amount.toString()),
             });
 
@@ -69,7 +86,7 @@ export function useDonate({ campaignId, onSuccess, onError }: UseDonateOptions):
             await createDonation(campaignId, {
                 donor_address: address,
                 amount,
-                token_type: 'MON' as TokenType, // Native token
+                token_type: 'MON' as TokenType,
                 tx_hash: hash,
             });
 
@@ -79,7 +96,7 @@ export function useDonate({ campaignId, onSuccess, onError }: UseDonateOptions):
             setError(error);
             onError?.(error);
         }
-    }, [isConnected, address, campaignId, sendTransactionAsync, onSuccess, onError]);
+    }, [isConnected, address, campaignId, writeContractAsync, onSuccess, onError]);
 
     return {
         donate,
@@ -89,17 +106,4 @@ export function useDonate({ campaignId, onSuccess, onError }: UseDonateOptions):
         error,
         txHash,
     };
-}
-
-/**
- * Helper to get treasury address for a campaign
- */
-async function getTreasuryAddress(campaignId: string): Promise<string> {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    const response = await fetch(`${API_URL}/campaigns/${campaignId}/treasury`);
-    if (!response.ok) {
-        throw new Error('Failed to get treasury address');
-    }
-    const data = await response.json();
-    return data.treasuryAddress;
 }

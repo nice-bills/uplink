@@ -163,13 +163,13 @@ export function CampaignDetailPage() {
                                     </div>
                                 </div>
 
-                                {/* Treasury Address - Always show platform shared treasury */}
+                                {/* Treasury Address */}
                                 <div className="mb-6 p-4 bg-zinc-800/50 border border-zinc-700 rounded-lg">
                                     <div className="flex items-center gap-2 mb-2">
                                         <Wallet className="w-4 h-4 text-accent" />
-                                        <span className="label text-xs">RECEIVING ADDRESS</span>
+                                        <span className="label text-xs">PLATFORM TREASURY</span>
                                     </div>
-                                    <p className="text-zinc-400 text-xs mb-2">Send MON directly to this address:</p>
+                                    <p className="text-zinc-400 text-xs mb-2">All donations are tracked on-chain. Treasury address:</p>
                                     <div className="flex items-center gap-2">
                                         <code className="flex-1 bg-zinc-900 px-3 py-2 rounded text-xs text-zinc-300 break-all font-mono">
                                             {PLATFORM_TREASURY_ADDRESS}
@@ -187,7 +187,7 @@ export function CampaignDetailPage() {
                                     </div>
                                     <div className="flex items-center gap-2 mt-3 text-zinc-500 text-xs">
                                         <Info className="w-3 h-3" />
-                                        <span>Funds held in treasury during probation period (3-5 days)</span>
+                                        <span>Funds tracked by campaign ID • Probation: 3-5 days</span>
                                     </div>
                                 </div>
 
