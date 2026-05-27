@@ -1,36 +1,26 @@
-/**
- * Progress Component - Industrial Brutalist
- */
+import { cn } from '@/lib/utils';
 
 interface ProgressProps {
-    value: number; // 0-100
-    size?: 'sm' | 'md' | 'lg';
-    showLabel?: boolean;
-    className?: string;
+  value: number;
+  className?: string;
+  size?: 'sm' | 'md';
 }
 
-const sizes = {
-    sm: 'h-1',
-    md: 'h-1.5',
-    lg: 'h-2.5',
-};
+export function Progress({ value, className, size = 'md' }: ProgressProps) {
+  const clamped = Math.min(Math.max(value, 0), 100);
 
-export function Progress({ value, size = 'md', showLabel = false, className = '' }: ProgressProps) {
-    const clampedValue = Math.min(Math.max(value, 0), 100);
-
-    return (
-        <div className={className}>
-            <div className={`progress-bar ${sizes[size]}`}>
-                <div
-                    className="progress-fill"
-                    style={{ width: `${clampedValue}%` }}
-                />
-            </div>
-            {showLabel && (
-                <div className="mt-1.5 mono text-xs text-zinc-500 text-right">
-                    {clampedValue.toFixed(0)}%
-                </div>
-            )}
-        </div>
-    );
+  return (
+    <div
+      className={cn(
+        'w-full overflow-hidden rounded-full bg-secondary/80',
+        size === 'sm' ? 'h-1' : 'h-1.5',
+        className,
+      )}
+    >
+      <div
+        className="h-full rounded-full bg-foreground/90 transition-all duration-500 ease-out"
+        style={{ width: `${clamped}%` }}
+      />
+    </div>
+  );
 }

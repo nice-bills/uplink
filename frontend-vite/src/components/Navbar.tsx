@@ -1,19 +1,19 @@
 /**
- * Navbar - Industrial Brutalist
- * Full-bleed dark, monospace nav, neon active states
+ * Glassmorphic navigation — cinematic landing register
  */
 
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Menu, X, Zap } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: 'HOME', href: '/' },
-  { name: 'CAMPAIGNS', href: '/campaigns' },
-  { name: 'LEADERBOARD', href: '/leaderboard' },
-  { name: 'CREATE', href: '/create' },
-  { name: 'PROFILE', href: '/profile' },
+  { name: 'Home', href: '/' },
+  { name: 'Campaigns', href: '/campaigns' },
+  { name: 'Leaderboard', href: '/leaderboard' },
+  { name: 'Create', href: '/create' },
 ];
 
 export function Navbar() {
@@ -25,87 +25,92 @@ export function Navbar() {
     return location.pathname.startsWith(href);
   };
 
+  const isHome = location.pathname === '/';
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800" role="navigation" aria-label="Main navigation">
-      <div className="container">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-accent flex items-center justify-center relative">
-              <Zap className="w-4 h-4 text-black" />
-              {/* Corner notch */}
-              <div className="absolute top-0 right-0 w-2 h-2 bg-zinc-950"
-                style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
-            </div>
-            <span className="font-display text-lg font-bold text-zinc-50 tracking-tight group-hover:text-accent transition-colors">
-              GENESIS
-            </span>
-          </Link>
+    <header
+      className={cn(
+        'relative z-50 w-full',
+        isHome ? 'absolute top-0 left-0 right-0' : 'sticky top-0 border-b border-border/40 bg-background/80 backdrop-blur-md',
+      )}
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div className="mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
+        <Link
+          to="/"
+          className="text-3xl tracking-tight text-foreground transition-opacity hover:opacity-90"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          Genesis<sup className="text-xs align-super">®</sup>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-                className={`mono text-xs px-4 py-2 transition-colors relative ${isActive(item.href)
-                  ? 'text-accent'
-                  : 'text-zinc-500 hover:text-zinc-50'
-                  }`}
-              >
-                {item.name}
-                {isActive(item.href) && (
-                  <span className="absolute bottom-0 left-4 right-4 h-px bg-accent" aria-hidden="true" />
-                )}
-              </Link>
-            ))}
-          </div>
-
-          {/* Wallet + Mobile Menu */}
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:block">
-              <ConnectButton
-                chainStatus="icon"
-                showBalance={false}
-              />
-            </div>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-zinc-400 hover:text-zinc-50 transition-colors"
-              aria-expanded={isOpen}
-              aria-label="Toggle navigation menu"
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              className={cn(
+                'text-sm transition-colors',
+                isActive(item.href)
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
             >
-              {isOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
-            </button>
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:block [&_button]:!liquid-glass [&_button]:!rounded-full [&_button]:!text-sm">
+            <ConnectButton chainStatus="icon" showBalance={false} />
           </div>
+
+          <Button size="default" className="hidden md:inline-flex" asChild>
+            <Link to="/create">Launch Campaign</Link>
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="rounded-full p-2 text-muted-foreground transition-colors hover:text-foreground md:hidden"
+            aria-expanded={isOpen}
+            aria-label="Toggle navigation menu"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-zinc-900 border-t border-zinc-800">
-          <div className="container py-4 space-y-1">
+        <div className="border-t border-border/40 bg-background/95 px-8 py-6 backdrop-blur-md md:hidden">
+          <nav className="flex flex-col gap-4" aria-label="Mobile">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`block mono text-sm px-4 py-3 border-l-2 transition-colors ${isActive(item.href)
-                  ? 'text-accent border-accent bg-zinc-800/50'
-                  : 'text-zinc-400 border-transparent hover:text-zinc-50 hover:border-zinc-600'
-                  }`}
+                className={cn(
+                  'text-sm transition-colors',
+                  isActive(item.href)
+                    ? 'text-foreground'
+                    : 'text-muted-foreground',
+                )}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="pt-4 mt-4 border-t border-zinc-800">
+            <Link to="/profile" onClick={() => setIsOpen(false)} className="text-sm text-muted-foreground">
+              Profile
+            </Link>
+            <div className="pt-4">
               <ConnectButton />
             </div>
-          </div>
+          </nav>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

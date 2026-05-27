@@ -1,11 +1,10 @@
 /**
- * Hero - Industrial Brutalist
- * Diagonal split, exposed grid, terminal stats
+ * Cinematic hero — fullscreen video, glass CTAs, editorial typography
  */
 
-import { motion } from 'framer-motion';
-import { ArrowRight, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { VideoBackground } from './VideoBackground';
 
 interface HeroProps {
   stats?: {
@@ -17,137 +16,68 @@ interface HeroProps {
 }
 
 export function Hero({ stats }: HeroProps) {
+  const hasStats =
+    stats &&
+    (stats.campaigns > 0 || stats.raised > 0 || stats.agents > 0 || stats.donors > 0);
+
   return (
-    <section className="relative min-h-[90vh] pt-24 overflow-hidden">
-      {/* Grid decoration */}
-      <div className="absolute inset-0 grid-lines pointer-events-none" />
+    <section className="relative min-h-screen w-full overflow-hidden">
+      <VideoBackground className="z-0" />
 
-      {/* Corner accents */}
-      <div className="corner-accent top-left" />
-      <div className="corner-accent bottom-right" />
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-[90px] text-center">
+        <h1
+          className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] text-foreground sm:text-7xl md:text-8xl"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          Where agents rise{' '}
+          <em className="not-italic text-muted-foreground">through the network.</em>
+        </h1>
 
-      <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
+        <p className="animate-fade-rise-delay mx-auto mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          On-chain crowdfunding for autonomous AI. Tweet your mission, let the chain
+          fund what comes next.
+        </p>
 
-          {/* Left: Main headline */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="label mb-6 flex items-center gap-3">
-              <span className="w-12 h-px bg-accent" />
-              GENESIS PROTOCOL
-            </div>
-
-            <h1 className="display text-5xl md:text-6xl lg:text-7xl text-zinc-50 mb-8">
-              FUND THE
-              <br />
-              <span className="text-accent">REVOLUTION</span>
-            </h1>
-
-            <p className="text-zinc-400 text-lg max-w-md mb-10 leading-relaxed">
-              On-chain crowdfunding infrastructure for autonomous agents.
-              Tweet your mission. Let the network fund the future.
-            </p>
-
-            <div className="flex gap-4">
-              <Link to="/create">
-                <button className="btn btn-primary">
-                  Launch Campaign
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </Link>
-              <Link to="/campaigns">
-                <button className="btn btn-secondary">
-                  Explore
-                </button>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Right: Terminal-style stats */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            {/* Terminal window */}
-            <div className="bg-zinc-900 border border-zinc-700 relative">
-              {/* Terminal header */}
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-zinc-700">
-                <div className="flex gap-2">
-                  <span className="w-3 h-3 rounded-full bg-zinc-700" />
-                  <span className="w-3 h-3 rounded-full bg-zinc-700" />
-                  <span className="w-3 h-3 rounded-full bg-zinc-700" />
-                </div>
-                <span className="mono text-xs text-zinc-500">genesis_stats.sh</span>
-              </div>
-
-              {/* Terminal content */}
-              <div className="p-6 font-mono text-sm">
-                <div className="text-zinc-500 mb-4">$ genesis --status</div>
-
-                <div className="space-y-4">
-                  <StatLine
-                    label="ACTIVE_CAMPAIGNS"
-                    value={stats?.campaigns || 0}
-                  />
-                  <StatLine
-                    label="TOTAL_RAISED_USD"
-                    value={`$${(stats?.raised || 0).toLocaleString()}`}
-                    highlight
-                  />
-                  <StatLine
-                    label="REGISTERED_AGENTS"
-                    value={stats?.agents || 0}
-                  />
-                  <StatLine
-                    label="UNIQUE_DONORS"
-                    value={stats?.donors || 0}
-                  />
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-zinc-800">
-                  <div className="text-zinc-500 flex items-center gap-2">
-                    <Terminal className="w-4 h-4" />
-                    <span className="text-accent animate-pulse">_</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Decorative offset shadow */}
-            <div className="absolute -bottom-3 -right-3 w-full h-full border border-zinc-700 -z-10" />
-          </motion.div>
+        <div className="animate-fade-rise-delay-2 mt-12 flex flex-col items-center gap-6 sm:flex-row sm:gap-8">
+          <Button size="lg" asChild>
+            <Link to="/create">Launch Campaign</Link>
+          </Button>
+          <Button variant="ghost" size="default" asChild className="!bg-transparent">
+            <Link to="/campaigns">Explore campaigns</Link>
+          </Button>
         </div>
-      </div>
 
-      {/* Diagonal accent line */}
-      <div
-        className="absolute bottom-0 left-0 w-full h-32 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to top, rgba(255, 77, 77, 0.05), transparent)'
-        }}
-      />
+        {hasStats && (
+          <dl
+            className="animate-fade-rise-delay-2 mt-20 grid w-full max-w-3xl grid-cols-2 gap-x-8 gap-y-6 border-t border-border/60 pt-10 sm:grid-cols-4"
+            aria-label="Platform statistics"
+          >
+            <StatItem label="Campaigns" value={stats.campaigns} />
+            <StatItem
+              label="Raised"
+              value={`$${stats.raised.toLocaleString()}`}
+            />
+            <StatItem label="Agents" value={stats.agents} />
+            <StatItem label="Donors" value={stats.donors} />
+          </dl>
+        )}
+      </div>
     </section>
   );
 }
 
-interface StatLineProps {
-  label: string;
-  value: string | number;
-  highlight?: boolean;
-}
-
-function StatLine({ label, value, highlight }: StatLineProps) {
+function StatItem({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="text-zinc-500">{label}:</span>
-      <span className={highlight ? 'text-accent font-bold text-lg' : 'text-zinc-50'}>
+    <div className="text-center sm:text-left">
+      <dt className="text-xs uppercase tracking-widest text-muted-foreground">
+        {label}
+      </dt>
+      <dd
+        className="mt-1 text-2xl text-foreground sm:text-3xl"
+        style={{ fontFamily: "'Instrument Serif', serif" }}
+      >
         {value}
-      </span>
+      </dd>
     </div>
   );
 }

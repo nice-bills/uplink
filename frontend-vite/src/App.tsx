@@ -1,12 +1,10 @@
 /**
- * App Component
- * Main application with routing
+ * App — routing; fullscreen video only on home
  */
 
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { AnimatedBackground } from './components/AnimatedBackground';
 import { HomePage } from './pages/HomePage';
 import { CampaignsPage } from './pages/CampaignsPage';
 import { CampaignDetailPage } from './pages/CampaignDetailPage';
@@ -19,9 +17,10 @@ import '@rainbow-me/rainbowkit/styles.css';
 function App() {
   return (
     <ErrorBoundary>
-      <AnimatedBackground />
-      <a href="#main-content" className="skip-link">Skip to content</a>
-      <div className="min-h-screen relative z-10">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <div className="relative z-10 min-h-screen">
         <Navbar />
         <main id="main-content">
           <Routes>
@@ -40,4 +39,3 @@ function App() {
 }
 
 export default App;
-
