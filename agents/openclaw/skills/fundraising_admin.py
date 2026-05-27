@@ -11,8 +11,10 @@ class FundraisingAdmin:
         # Configuration
         self.rpc_url = "https://testnet-rpc.monad.xyz"
         self.w3 = Web3(Web3.HTTPProvider(self.rpc_url))
-        # Point to the official permanent secure domain
-        self.api_url = "https://uplink-genesis.duckdns.org"
+        self.api_url = os.getenv(
+            "PLATFORM_API",
+            "https://genesis-backend.onrender.com",
+        ).rstrip("/")
         
         # SECURE: Load API Keys from Environment
         self.api_key = os.getenv("AGENT_API_KEY")

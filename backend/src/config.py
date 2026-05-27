@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     TURSO_DATABASE_URL: str = ""
     TURSO_AUTH_TOKEN: str = ""
     AGENT_API_KEY: str  # Required for secure agent access
+    FRONTEND_URL: str = ""  # Production frontend origin (CORS)
     DEBUG: bool = False  # Debug mode flag
 
     @field_validator("DATABASE_URL")

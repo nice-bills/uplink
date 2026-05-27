@@ -22,8 +22,19 @@ import type {
   UUID,
 } from '../types';
 
-// API Base URL - configurable for different environments
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// API Base URL — dev uses local backend; production defaults to Vercel /api proxy
+function resolveApiUrl(): string {
+  const configured = import.meta.env.VITE_API_URL as string | undefined;
+  if (configured?.trim()) {
+    return configured.replace(/\/$/, '');
+  }
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8000';
+  }
+  return '/api';
+}
+
+export const API_URL = resolveApiUrl();
 
 // ============ HTTP Helpers ============
 
