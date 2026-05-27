@@ -33,8 +33,20 @@ Neutrals tinted toward navy. No pure #000 or #fff.
 - Fullscreen looping muted video background
 - Minimal overlay; video provides depth
 
+## Media (cohesive ambient)
+
+- **One** hero video (`GENESIS_HERO_VIDEO`) — persistent via `AmbientBackground`, never remounts on navigation
+- Overlay moods per route (`hero` / `soft` / `deep` / `focus`) — smooth crossfade, same light throughout
+- Gallery + covers: verified navy stills only (`COHESIVE_STILLS`), unified `.media-cohesive-grade`
+- `MediaImage`: skeleton → fade-in, fallback to `GENESIS_POSTER` on error
+- Motion: framer-motion page transitions + `fadeUp` stagger (see `src/lib/motion.ts`)
+
 ## Inner pages
 
-- `PageShell`: same hero video URL, dimmed with `bg-background/88` overlay (no Midjourney)
+- `PageShell`: per-route background from `PAGE_BACKGROUNDS`, dimmed overlay
 - `GlassPanel`, `PageHeader`, shadcn `Input` / `Textarea` / `FilterTabs`
 - No industrial cards, grid lines, or monospace labels
+
+## Tooling
+
+- Frontend package manager: **pnpm** (`packageManager` in `package.json`, `pnpm-lock.yaml`)

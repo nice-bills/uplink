@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import type { Campaign } from '../types';
 import { Countdown } from './Countdown';
 import { formatAmount, calculateProgress } from '../lib/api';
+import { getCampaignCover } from '@/lib/media';
+import { MediaImage } from './MediaImage';
 import { cn } from '@/lib/utils';
 
 interface CampaignCardProps {
@@ -15,6 +17,7 @@ interface CampaignCardProps {
 
 export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
   const progress = calculateProgress(campaign.raised, campaign.goal);
+  const cover = getCampaignCover(campaign.id, campaign.source_author_avatar);
 
   return (
     <article
@@ -26,8 +29,18 @@ export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
     >
       <Link
         to={`/campaign/${campaign.id}`}
-        className="liquid-glass block rounded-2xl p-6 transition-transform hover:scale-[1.01]"
+        className="liquid-glass block overflow-hidden rounded-2xl transition-transform hover:scale-[1.01]"
       >
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
+          <MediaImage
+            src={cover.src}
+            alt={cover.alt}
+            className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/85 via-background/20 to-transparent" />
+        </div>
+
+        <div className="p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <span
             className={cn(
@@ -69,6 +82,7 @@ export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
           {' '}
           of ${formatAmount(campaign.goal || 0)} raised
         </p>
+        </div>
       </Link>
     </article>
   );
