@@ -80,7 +80,7 @@ export function UserProfilePage() {
 
   if (!isConnected) {
     return (
-      <PageShell background="profile">
+      <PageShell>
         <SEO title="Profile" />
         <div className="container flex max-w-md flex-col items-center">
           <GlassPanel className="w-full p-10 text-center">
@@ -111,7 +111,7 @@ export function UserProfilePage() {
   ];
 
   return (
-    <PageShell background="profile">
+    <PageShell>
       <SEO title="Profile" />
       <div className="container max-w-4xl">
         <PageHeader

@@ -33,12 +33,13 @@ Neutrals tinted toward navy. No pure #000 or #fff.
 - Fullscreen looping muted video background
 - Minimal overlay; video provides depth
 
-## Media (multi-asset)
+## Media (cohesive ambient)
 
-- `src/lib/media.ts` — curated videos + stills per route (no Midjourney)
-- Home: hero video + `VisualShowcase` bento gallery (6 stills)
-- Inner pages: route-specific background in `PageShell` (video or image + Ken Burns)
-- Campaign cards/detail: cover image from author avatar or rotating pool
+- **One** hero video (`GENESIS_HERO_VIDEO`) — persistent via `AmbientBackground`, never remounts on navigation
+- Overlay moods per route (`hero` / `soft` / `deep` / `focus`) — smooth crossfade, same light throughout
+- Gallery + covers: verified navy stills only (`COHESIVE_STILLS`), unified `.media-cohesive-grade`
+- `MediaImage`: skeleton → fade-in, fallback to `GENESIS_POSTER` on error
+- Motion: framer-motion page transitions + `fadeUp` stagger (see `src/lib/motion.ts`)
 
 ## Inner pages
 

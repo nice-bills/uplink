@@ -100,17 +100,31 @@
   }
 }
 
-@keyframes ken-burns {
-  from {
-    transform: scale(1.02);
-  }
-  to {
-    transform: scale(1.12);
-  }
+/* Cohesive color grade on gallery + card stills */
+.media-cohesive-grade {
+  filter: brightness(0.9) saturate(0.85) contrast(1.04);
 }
 
-.animate-ken-burns {
-  animation: ken-burns 28s ease-in-out infinite alternate;
+.ambient-video {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.ambient-vignette {
+  box-shadow: inset 0 0 140px hsl(201 100% 5% / 0.55);
+}
+
+/* Section flow — blends into global ambient */
+.section-flow {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--background) / 0.35) 0%,
+    hsl(var(--background) / 0.82) 35%,
+    hsl(var(--background) / 0.94) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 :focus-visible {
@@ -145,10 +159,6 @@
     scroll-behavior: auto !important;
   }
 
-  .animate-ken-burns {
-    animation: none !important;
-    transform: none !important;
-  }
 }
 
 ::-webkit-scrollbar {

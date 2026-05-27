@@ -7,6 +7,7 @@ import type { Campaign } from '../types';
 import { Countdown } from './Countdown';
 import { formatAmount, calculateProgress } from '../lib/api';
 import { getCampaignCover } from '@/lib/media';
+import { MediaImage } from './MediaImage';
 import { cn } from '@/lib/utils';
 
 interface CampaignCardProps {
@@ -31,14 +32,12 @@ export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
         className="liquid-glass block overflow-hidden rounded-2xl transition-transform hover:scale-[1.01]"
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden">
-          <img
+          <MediaImage
             src={cover.src}
             alt={cover.alt}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
+            className="h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/85 via-background/20 to-transparent" />
         </div>
 
         <div className="p-6">
