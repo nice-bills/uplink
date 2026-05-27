@@ -107,9 +107,10 @@ forge test
 
 ## 🎥 Demo
 
-- **Video:** [YouTube/Loom link]
-- **Live Demo:** [Vercel link]
-- **Contracts:** [MonadVision explorer]
+- **Live frontend:** https://uplink-genesis.vercel.app
+- **Backend API:** https://genesis-backend.onrender.com (deploy via `render.yaml`)
+- **Deploy guide:** [DEPLOYMENT.md](./DEPLOYMENT.md)
+- **Contracts:** [MonadVision explorer](https://testnet.monadvision.com)
 
 ## 👥 Team
 
