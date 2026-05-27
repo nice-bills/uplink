@@ -1,122 +1,96 @@
-/**
- * SourceCard - Industrial Brutalist
- * Display the original tweet/post that created a campaign 
- */
-
 import { ExternalLink, Twitter } from 'lucide-react';
+import { GlassPanel } from './layout/GlassPanel';
 
 interface SourceCardProps {
-    platform?: string | null;
-    authorHandle?: string | null;
-    authorName?: string | null;
-    authorAvatar?: string | null;
-    content?: string | null;
-    url?: string | null;
-    timestamp?: string | null;
+  platform?: string | null;
+  authorHandle?: string | null;
+  authorName?: string | null;
+  authorAvatar?: string | null;
+  content?: string | null;
+  url?: string | null;
+  timestamp?: string | null;
 }
 
 export function SourceCard({
-    platform,
-    authorHandle,
-    authorName,
-    authorAvatar,
-    content,
-    url,
-    timestamp,
+  platform,
+  authorHandle,
+  authorName,
+  authorAvatar,
+  content,
+  url,
+  timestamp,
 }: SourceCardProps) {
-    if (!platform || !content) {
+  if (!platform || !content) return null;
+
+  const platformIcon = () => {
+    switch (platform?.toLowerCase()) {
+      case 'twitter':
+      case 'x':
+        return <Twitter className="h-4 w-4" />;
+      default:
         return null;
     }
+  };
 
-    const platformIcon = () => {
-        switch (platform?.toLowerCase()) {
-            case 'twitter':
-            case 'x':
-                return <Twitter className="w-4 h-4" />;
-            case 'moltbook':
-                return (
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                        <circle cx="12" cy="12" r="10" />
-                    </svg>
-                );
-            default:
-                return null;
-        }
-    };
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+  };
 
-    const formatDate = (dateStr: string | null) => {
-        if (!dateStr) return '';
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-        });
-    };
+  return (
+    <GlassPanel className="p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground">Source</p>
+        {url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        )}
+      </div>
 
-    return (
-        <div className="card">
-            <div className="px-4 py-3 border-b border-zinc-700 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <span className="status-dot" />
-                    <span className="label">SOURCE</span>
-                </div>
-                {url && (
-                    <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-zinc-500 hover:text-accent transition-colors"
-                    >
-                        <ExternalLink className="w-4 h-4" />
-                    </a>
-                )}
-            </div>
-
-            <div className="card-content">
-                {/* Author info */}
-                <div className="flex items-center gap-3 mb-4">
-                    {authorAvatar ? (
-                        <img
-                            src={authorAvatar}
-                            alt={authorName || authorHandle || 'Author'}
-                            className="w-10 h-10 rounded-full bg-zinc-800"
-                        />
-                    ) : (
-                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center">
-                            <span className="text-zinc-400 text-sm font-medium">
-                                {(authorHandle || '?')[0].toUpperCase()}
-                            </span>
-                        </div>
-                    )}
-
-                    <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                            <span className="font-medium text-zinc-50 truncate">
-                                {authorName || authorHandle}
-                            </span>
-                            <span className="text-zinc-500">{platformIcon()}</span>
-                        </div>
-                        {authorHandle && (
-                            <span className="text-sm text-zinc-500 mono">
-                                @{authorHandle.replace('@', '')}
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                {/* Content */}
-                <p className="text-zinc-300 leading-relaxed mb-4">{content}</p>
-
-                {/* Timestamp */}
-                {timestamp && (
-                    <p className="mono text-xs text-zinc-600">
-                        {formatDate(timestamp)}
-                    </p>
-                )}
-            </div>
+      <div className="flex items-center gap-3 mb-4">
+        {authorAvatar ? (
+          <img
+            src={authorAvatar}
+            alt={authorName || authorHandle || 'Author'}
+            className="h-10 w-10 rounded-full object-cover"
+          />
+        ) : (
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm text-muted-foreground">
+            {(authorHandle || '?')[0].toUpperCase()}
+          </div>
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <span className="truncate font-medium text-foreground">
+              {authorName || authorHandle}
+            </span>
+            <span className="text-muted-foreground">{platformIcon()}</span>
+          </div>
+          {authorHandle && (
+            <span className="text-sm text-muted-foreground">
+              @{authorHandle.replace('@', '')}
+            </span>
+          )}
         </div>
-    );
+      </div>
+
+      <p className="leading-relaxed text-foreground/90">{content}</p>
+
+      {timestamp && (
+        <p className="mt-4 text-xs text-muted-foreground">{formatDate(timestamp)}</p>
+      )}
+    </GlassPanel>
+  );
 }

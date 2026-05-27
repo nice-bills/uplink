@@ -32,3 +32,9 @@ Neutrals tinted toward navy. No pure #000 or #fff.
 
 - Fullscreen looping muted video background
 - Minimal overlay; video provides depth
+
+## Inner pages
+
+- `PageShell`: same hero video URL, dimmed with `bg-background/88` overlay (no Midjourney)
+- `GlassPanel`, `PageHeader`, shadcn `Input` / `Textarea` / `FilterTabs`
+- No industrial cards, grid lines, or monospace labels

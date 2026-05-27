@@ -1,11 +1,10 @@
 /**
- * App — routing; cinematic hero only on home (no global grid canvas)
+ * App — routing; fullscreen video only on home
  */
 
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { AnimatedBackground } from './components/AnimatedBackground';
 import { HomePage } from './pages/HomePage';
 import { CampaignsPage } from './pages/CampaignsPage';
 import { CampaignDetailPage } from './pages/CampaignDetailPage';
@@ -16,12 +15,8 @@ import { EmbedPage } from './pages/EmbedPage';
 import '@rainbow-me/rainbowkit/styles.css';
 
 function App() {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
-
   return (
     <ErrorBoundary>
-      {!isHome && <AnimatedBackground />}
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
