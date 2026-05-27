@@ -30,7 +30,7 @@ export function LeaderboardPage() {
   const donors = donorsData?.donors || [];
 
   return (
-    <PageShell>
+    <PageShell background="leaderboard">
       <div className="container max-w-3xl">
         <PageHeader
           kicker="Rankings"

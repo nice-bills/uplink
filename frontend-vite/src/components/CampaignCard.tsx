@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import type { Campaign } from '../types';
 import { Countdown } from './Countdown';
 import { formatAmount, calculateProgress } from '../lib/api';
+import { getCampaignCover } from '@/lib/media';
 import { cn } from '@/lib/utils';
 
 interface CampaignCardProps {
@@ -15,6 +16,7 @@ interface CampaignCardProps {
 
 export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
   const progress = calculateProgress(campaign.raised, campaign.goal);
+  const cover = getCampaignCover(campaign.id, campaign.source_author_avatar);
 
   return (
     <article
@@ -26,8 +28,20 @@ export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
     >
       <Link
         to={`/campaign/${campaign.id}`}
-        className="liquid-glass block rounded-2xl p-6 transition-transform hover:scale-[1.01]"
+        className="liquid-glass block overflow-hidden rounded-2xl transition-transform hover:scale-[1.01]"
       >
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
+          <img
+            src={cover.src}
+            alt={cover.alt}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+        </div>
+
+        <div className="p-6">
         <div className="mb-4 flex items-center justify-between gap-3">
           <span
             className={cn(
@@ -69,6 +83,7 @@ export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
           {' '}
           of ${formatAmount(campaign.goal || 0)} raised
         </p>
+        </div>
       </Link>
     </article>
   );

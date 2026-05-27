@@ -33,8 +33,19 @@ Neutrals tinted toward navy. No pure #000 or #fff.
 - Fullscreen looping muted video background
 - Minimal overlay; video provides depth
 
+## Media (multi-asset)
+
+- `src/lib/media.ts` — curated videos + stills per route (no Midjourney)
+- Home: hero video + `VisualShowcase` bento gallery (6 stills)
+- Inner pages: route-specific background in `PageShell` (video or image + Ken Burns)
+- Campaign cards/detail: cover image from author avatar or rotating pool
+
 ## Inner pages
 
-- `PageShell`: same hero video URL, dimmed with `bg-background/88` overlay (no Midjourney)
+- `PageShell`: per-route background from `PAGE_BACKGROUNDS`, dimmed overlay
 - `GlassPanel`, `PageHeader`, shadcn `Input` / `Textarea` / `FilterTabs`
 - No industrial cards, grid lines, or monospace labels
+
+## Tooling
+
+- Frontend package manager: **pnpm** (`packageManager` in `package.json`, `pnpm-lock.yaml`)

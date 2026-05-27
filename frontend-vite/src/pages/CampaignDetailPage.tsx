@@ -12,6 +12,7 @@ import { ShareButtons } from '../components/ShareButtons';
 import { useDonate } from '../hooks/useDonate';
 import type { Campaign } from '../types';
 import { getCampaign, formatAmount, calculateProgress } from '../lib/api';
+import { getCampaignCover } from '@/lib/media';
 import { cn } from '@/lib/utils';
 
 const PLATFORM_TREASURY_ADDRESS = '0xEd4eb043c9faAd76B1Ec5a4522495813099FF77A';
@@ -37,7 +38,7 @@ export function CampaignDetailPage() {
 
   if (loading) {
     return (
-      <PageShell showFooter={false}>
+      <PageShell background="campaignDetail" showFooter={false}>
         <div className="container max-w-4xl">
           <div className="h-96 animate-pulse rounded-2xl bg-secondary/40" />
         </div>
@@ -47,7 +48,7 @@ export function CampaignDetailPage() {
 
   if (!campaign) {
     return (
-      <PageShell>
+      <PageShell background="campaignDetail">
         <div className="container max-w-4xl text-center">
           <h1
             className="mb-4 text-3xl text-foreground"
@@ -64,9 +65,10 @@ export function CampaignDetailPage() {
   }
 
   const progress = calculateProgress(campaign.raised, campaign.goal);
+  const cover = getCampaignCover(campaign.id, campaign.source_author_avatar);
 
   return (
-    <PageShell>
+    <PageShell background="campaignDetail" overlayOpacity="heavy">
       <Toaster
         position="top-right"
         toastOptions={{
@@ -89,18 +91,31 @@ export function CampaignDetailPage() {
           Back to campaigns
         </Link>
 
-        <div className="grid gap-8 lg:grid-cols-5">
-          <div className="animate-fade-rise space-y-6 lg:col-span-3">
-            <GlassPanel className="p-6 md:p-8">
+        <div className="animate-fade-rise mb-10 overflow-hidden rounded-2xl">
+          <div className="relative aspect-[21/9] w-full">
+            <img
+              src={cover.src}
+              alt={cover.alt}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 {campaign.status}
               </p>
               <h1
-                className="mt-2 text-3xl text-foreground md:text-4xl"
+                className="mt-2 max-w-3xl text-3xl text-foreground md:text-5xl"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
                 {campaign.title}
               </h1>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-5">
+          <div className="animate-fade-rise space-y-6 lg:col-span-3">
+            <GlassPanel className="p-6 md:p-8">
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 {campaign.description || 'No description provided.'}
               </p>

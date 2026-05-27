@@ -143,7 +143,7 @@ export function CreateCampaignPage() {
   };
 
   return (
-    <PageShell>
+    <PageShell background="create">
       <div className="container max-w-2xl">
         <PageHeader
           kicker="Launch"

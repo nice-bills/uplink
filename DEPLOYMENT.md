@@ -38,8 +38,8 @@ uv run uvicorn src.main:app --reload
 
 # Frontend
 cd frontend-vite
-npm install
-npm run dev
+corepack enable && pnpm install
+pnpm run dev
 ```
 
 Docker Compose: `docker compose up` from the repo root.

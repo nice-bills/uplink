@@ -4,7 +4,7 @@
 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { VideoBackground } from './VideoBackground';
+import { CinematicBackground } from './CinematicBackground';
 
 interface HeroProps {
   stats?: {
@@ -22,7 +22,7 @@ export function Hero({ stats }: HeroProps) {
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
-      <VideoBackground className="z-0" />
+      <CinematicBackground background="home" className="z-0" />
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-[90px] text-center">
         <h1

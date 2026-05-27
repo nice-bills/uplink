@@ -62,7 +62,7 @@ export function CampaignsPage() {
   }, [campaigns, searchTerm, sortBy]);
 
   return (
-    <PageShell>
+    <PageShell background="campaigns">
       <div className="container">
         <PageHeader
           kicker="Browse"

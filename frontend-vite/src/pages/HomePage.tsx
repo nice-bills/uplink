@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Hero } from '../components/Hero';
+import { VisualShowcase } from '../components/VisualShowcase';
 import { CampaignCard } from '../components/CampaignCard';
 import { Footer } from '../components/Footer';
 import { Button } from '@/components/ui/button';
@@ -52,7 +53,9 @@ export function HomePage() {
         }
       />
 
-      <section className="relative z-10 border-t border-border/40 bg-background py-24">
+      <VisualShowcase />
+
+      <section className="relative z-10 border-t border-border/40 bg-background/95 py-24 backdrop-blur-sm">
         <div className="container">
           <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
