@@ -1,9 +1,8 @@
 /**
- * App Component
- * Main application with routing
+ * App — routing; cinematic hero only on home (no global grid canvas)
  */
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AnimatedBackground } from './components/AnimatedBackground';
@@ -17,11 +16,16 @@ import { EmbedPage } from './pages/EmbedPage';
 import '@rainbow-me/rainbowkit/styles.css';
 
 function App() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <ErrorBoundary>
-      <AnimatedBackground />
-      <a href="#main-content" className="skip-link">Skip to content</a>
-      <div className="min-h-screen relative z-10">
+      {!isHome && <AnimatedBackground />}
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <div className="relative z-10 min-h-screen">
         <Navbar />
         <main id="main-content">
           <Routes>
@@ -40,4 +44,3 @@ function App() {
 }
 
 export default App;
-

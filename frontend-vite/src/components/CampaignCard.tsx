@@ -1,13 +1,12 @@
 /**
- * CampaignCard - Industrial Brutalist
- * Corner notch, hard shadow, neon progress
+ * Campaign card — glass surface, editorial type (no brutalist notches)
  */
 
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import type { Campaign } from '../types';
 import { Countdown } from './Countdown';
 import { formatAmount, calculateProgress } from '../lib/api';
+import { cn } from '@/lib/utils';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -16,66 +15,61 @@ interface CampaignCardProps {
 
 export function CampaignCard({ campaign, index = 0 }: CampaignCardProps) {
   const progress = calculateProgress(campaign.raised, campaign.goal);
-  const sectionNum = String(index + 1).padStart(2, '0');
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.08,
-        ease: [0.16, 1, 0.3, 1]
-      }}
+    <article
+      className={cn(
+        'group animate-fade-rise',
+        index > 0 && 'animate-fade-rise-delay',
+      )}
+      style={{ animationDelay: index > 1 ? `${0.1 * index}s` : undefined }}
     >
-      <Link to={`/campaign/${campaign.id}`} className="block group">
-        <div className="card h-full">
-          {/* Header strip */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-700">
-            <div className="flex items-center gap-3">
-              <span className={`status-dot ${campaign.status !== 'active' ? 'opacity-30 !bg-zinc-500' : ''}`} />
-              <span className="mono text-xs text-zinc-500">{sectionNum}</span>
-            </div>
-            <span className={`badge ${campaign.status === 'active' ? 'badge-active' : 'badge-completed'}`}>
-              {campaign.status}
-            </span>
-          </div>
-
-          {/* Content */}
-          <div className="card-content">
-            <h3 className="font-display text-lg font-bold text-zinc-50 mb-2 line-clamp-1 group-hover:text-accent transition-colors">
-              {campaign.title}
-            </h3>
-            <p className="text-sm text-zinc-500 mb-6 line-clamp-2">
-              {campaign.description || 'No description available'}
-            </p>
-
-            {/* Progress bar */}
-            <div className="mb-4">
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${Math.min(progress, 100)}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Stats row */}
-            <div className="flex justify-between items-center">
-              <div>
-                <span className="data text-lg">${formatAmount(campaign.raised)}</span>
-                <span className="text-zinc-600 text-sm ml-2">
-                  / ${formatAmount(campaign.goal || 0)}
-                </span>
-              </div>
-
-              {campaign.deadline && campaign.status === 'active' && (
-                <Countdown deadline={campaign.deadline} />
-              )}
-            </div>
-          </div>
+      <Link
+        to={`/campaign/${campaign.id}`}
+        className="liquid-glass block rounded-2xl p-6 transition-transform hover:scale-[1.01]"
+      >
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <span
+            className={cn(
+              'text-xs uppercase tracking-widest',
+              campaign.status === 'active'
+                ? 'text-foreground'
+                : 'text-muted-foreground',
+            )}
+          >
+            {campaign.status}
+          </span>
+          {campaign.deadline && campaign.status === 'active' && (
+            <Countdown deadline={campaign.deadline} />
+          )}
         </div>
+
+        <h3
+          className="mb-2 line-clamp-2 text-xl text-foreground transition-colors group-hover:text-muted-foreground"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          {campaign.title}
+        </h3>
+
+        <p className="mb-6 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+          {campaign.description || 'No description yet.'}
+        </p>
+
+        <div className="mb-3 h-px w-full bg-border/80" />
+
+        <div className="h-1 w-full overflow-hidden rounded-full bg-secondary">
+          <div
+            className="h-full rounded-full bg-foreground/90 transition-all duration-500"
+            style={{ width: `${Math.min(progress, 100)}%` }}
+          />
+        </div>
+
+        <p className="mt-4 text-sm text-muted-foreground">
+          <span className="text-foreground">${formatAmount(campaign.raised)}</span>
+          {' '}
+          of ${formatAmount(campaign.goal || 0)} raised
+        </p>
       </Link>
-    </motion.div>
+    </article>
   );
 }

@@ -10,21 +10,19 @@ import './index.css'
 
 const queryClient = new QueryClient()
 
-/* Industrial dark theme for RainbowKit */
 const genesisTheme = darkTheme({
-  accentColor: '#FF4D4D',
-  accentColorForeground: '#000',
-  borderRadius: 'none',
+  accentColor: 'hsl(0 0% 100%)',
+  accentColorForeground: 'hsl(0 0% 4%)',
+  borderRadius: 'large',
   fontStack: 'system',
 })
 
-// Override specific token values to match our zinc palette
-genesisTheme.colors.connectButtonBackground = '#18181B'
-genesisTheme.colors.connectButtonInnerBackground = '#27272A'
-genesisTheme.colors.connectButtonText = '#FAFAFA'
-genesisTheme.colors.modalBackground = '#18181B'
-genesisTheme.colors.modalBorder = '#3F3F46'
-genesisTheme.fonts.body = "'IBM Plex Mono', monospace"
+genesisTheme.colors.connectButtonBackground = 'hsl(201 100% 13% / 0.6)'
+genesisTheme.colors.connectButtonInnerBackground = 'hsl(0 0% 10%)'
+genesisTheme.colors.connectButtonText = 'hsl(0 0% 100%)'
+genesisTheme.colors.modalBackground = 'hsl(201 80% 11%)'
+genesisTheme.colors.modalBorder = 'hsl(0 0% 18%)'
+genesisTheme.fonts.body = "'Inter', sans-serif"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
